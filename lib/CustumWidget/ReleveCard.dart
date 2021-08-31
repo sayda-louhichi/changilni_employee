@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:changilni_employee/Models/ReleveModel.dart';
 import 'package:changilni_employee/api.dart';
+import 'package:changilni_employee/pages/HomePage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -13,6 +14,45 @@ class ReleveCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+     Future<void> _confirmDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, 
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Warning!'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Are you sure want delete this item?'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Yes'),
+              onPressed: () {
+                 ReleveModel relevemodel;
+        networkHandler.delete(
+              "/releve/delete/${releveModel.id}",relevemodel); 
+              Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => HomePage()),
+                          (route) => false);
+              },
+            ),
+            FlatButton(
+              child: const Text('No'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
     return Container(
       height: 280,
       padding: EdgeInsets.symmetric(horizontal: 13, vertical: 8),
@@ -49,10 +89,12 @@ class ReleveCard extends StatelessWidget {
               ),
             ),
            IconButton(
-            icon: Icon(Icons.edit),
-            onPressed: () {},
-            color: Colors.black,
-          ),
+              icon: Icon(Icons.delete),
+              onPressed: () {_confirmDialog();},
+              color: Color(0xFF27313B),
+                iconSize: 30,
+                 padding:EdgeInsets.only(bottom:50)
+            ),
           ],
         ),
       ),

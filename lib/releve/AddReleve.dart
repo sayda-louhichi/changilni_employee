@@ -18,14 +18,16 @@ class _AddReleveState extends State<AddReleve> {
   final _formkey = GlobalKey<FormState>();
   TextEditingController _immatricule = TextEditingController();
   TextEditingController _adress = TextEditingController();
-  TextEditingController _parc = TextEditingController();
+TextEditingController _parc = TextEditingController();
    TextEditingController _name = TextEditingController();
-  ImagePicker _pickerr = ImagePicker();
+  ImagePicker _picker = ImagePicker();
   PickedFile _imageFile;
   IconData iconphoto = Icons.image;
   Api networkHandler = Api();
-  var  selectedType;
  List parcItemList = List();
+ List immaItemList = List();
+var selectedType ;
+ var select;
  Future getListParc()async{
    var response= await http.get("http://192.168.1.7:3000/admin/list-parc");
    if(response.statusCode == 200){
@@ -36,10 +38,21 @@ class _AddReleveState extends State<AddReleve> {
    }
    print(parcItemList);
  }
+ Future getListImma()async{
+   var response= await http.get("http://192.168.1.7:3000/admin/list-imma");
+   if(response.statusCode == 200){
+     var jsonData = json.decode(response.body);
+     setState((){
+       immaItemList =jsonData;
+     });
+   }
+   print(immaItemList);
+ }
  @override
  void initState(){
    super.initState();
    getListParc();
+   getListImma();
  }
   @override
   Widget build(BuildContext context) {
@@ -58,16 +71,16 @@ class _AddReleveState extends State<AddReleve> {
         actions: <Widget>[
           FlatButton(
             onPressed: () {
-              if (_imageFile.path != null &&
+              /*if (_imageFile.path != null &&
                   _formkey.currentState.validate()) {
                 showModalBottomSheet(
                   context: context,
-                  builder: ((builder) => OverlayCard(
+                 builder: ((builder) => OverlayCard(
                         imagefile: _imageFile,
                         immatriculation: _immatricule.text,
-                      )),
-                );
-              }
+                      ))*/
+                
+            
             },
             child: Text(
               "Voir",
@@ -135,7 +148,8 @@ class _AddReleveState extends State<AddReleve> {
               iconphoto,
               color: Color(0xFF707070),
             ),
-            onPressed: takeCoverPhoto,
+            onPressed:(){showModalBottomSheet(
+                      context: context, builder: ((builder) => bottomSheet()));}
           ),
         ),
       ),
@@ -177,29 +191,23 @@ class _AddReleveState extends State<AddReleve> {
       padding: const EdgeInsets.symmetric(
         horizontal: 10,
       ),
-      child: TextFormField(
-        controller: _immatricule,
-        validator: (value) {
-          if (value.isEmpty) {
-            return "Champ immatriculation est obligatoire";
-          }
-          return null;
-        },
-        decoration: InputDecoration(
-          border: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: Color(0xFF707070),
-            ),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: Color(0xFF707070),
-              width: 2,
-            ),
-          ),
-          labelText: "Immatriculation",
-        ),
-      ),
+    
+      child:DropdownButton(
+          isExpanded:true,
+          hint:Text("Immatriculation"),
+          value:selectedType,
+          items: immaItemList.map((immatricule) {
+            return DropdownMenuItem(
+              value:immatricule['immatriculation'],
+              child: Text(immatricule['immatriculation'])
+              );
+          }).toList(),
+        onChanged:(value){
+          setState(() {
+            _immatricule.text=value;
+          });
+        }),
+   
     );
   }
 Widget parcTextField() {
@@ -207,21 +215,7 @@ Widget parcTextField() {
        padding: const EdgeInsets.symmetric(
         horizontal: 10,
       ),
-      /*child:  DropdownButton(
-          isExpanded:true,
-          hint:Text("Parc"),
-          value:selectedType,
-          items: parcItemList.map((parc) {
-            return DropdownMenuItem(
-              value:parc['name'],
-              child: Text(parc['name']));
-          }).toList(),
-        onChanged:(value){
-          setState(() {
-            selectedType=value;
-          });
-        }),*/
-         child:new PopupMenuButton<String>(
+    /* child: new PopupMenuButton<String>(
                         icon: const Icon(Icons.arrow_drop_down),
                         onSelected: (String value) {
                           _parc.text = value;
@@ -231,10 +225,23 @@ Widget parcTextField() {
                             return new PopupMenuItem(child: new Text(parc['name']),  value:parc['name']);
                           }).toList();
                         },
-                      ),
+                      ),*/
+                      child:  DropdownButton(
+          isExpanded:true,
+          hint:Text("Parc"),
+          value:selectedType,
+          items: parcItemList.map((parc) {
+            return DropdownMenuItem(
+              value:parc['name'],
+              child: Text(parc['name'])
+              );
+          }).toList(),
+        onChanged:(value){
+          setState(() {
+            _parc.text=value;
+          });
+        }),
       
-     
-    
     );
   }
   Widget addButton() {
@@ -279,11 +286,48 @@ Widget parcTextField() {
     );
   }
 
-  void takeCoverPhoto() async {
-    final coverPhoto = await _pickerr.getImage(source: ImageSource.gallery);
+   Widget bottomSheet() {
+    return Container(
+        height: 100.0,
+        width: MediaQuery.of(context).size.width,
+        margin: EdgeInsets.symmetric(
+          horizontal: 20,
+          vertical: 20,
+        ),
+        child: Column(children: <Widget>[
+          Text(
+            "sélectionner une photo",
+            style: TextStyle(fontSize: 20.0),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+            FlatButton.icon(
+              icon: Icon(Icons.camera),
+              onPressed: () {
+                takePhoto(ImageSource.camera);
+              },
+              label: Text("Caméra"),
+            ),
+            FlatButton.icon(
+              icon: Icon(Icons.image),
+              onPressed: () {
+                takePhoto(ImageSource.gallery);
+              },
+              label: Text("Gallerie"),
+            ),
+          ])
+        ]));
+  }
+
+  void takePhoto(ImageSource source) async {
+    final PickedFile = await _picker.getImage(
+      source: source,
+    );
     setState(() {
-      _imageFile = coverPhoto;
-      iconphoto = Icons.check_box;
+      _imageFile = PickedFile;
     });
   }
+
 }

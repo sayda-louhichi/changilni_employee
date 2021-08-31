@@ -1,5 +1,6 @@
 import 'package:changilni_employee/Models/ReleveModel.dart';
 import 'package:changilni_employee/api.dart';
+import 'package:changilni_employee/pages/HomePage.dart';
 import 'package:flutter/material.dart';
 
 class Releve extends StatelessWidget {
@@ -9,6 +10,45 @@ class Releve extends StatelessWidget {
   final Api networkHandler;
   @override
   Widget build(BuildContext context) {
+    Future<void> _confirmDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, 
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Warning!'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Are you sure want delete this item?'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Yes'),
+              onPressed: () {
+                 ReleveModel relevemodel;
+        networkHandler.delete(
+              "/releve/delete/${releveModel.id}",relevemodel); 
+              Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => HomePage()),
+                          (route) => false);
+              },
+            ),
+            FlatButton(
+              child: const Text('No'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
     return Scaffold(
       body: ListView(
         children: [
@@ -24,11 +64,19 @@ class Releve extends StatelessWidget {
                     width: MediaQuery.of(context).size.width,
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                        image: networkHandler.getImagee(releveModel.coverImage),
+                      image: networkHandler.getImagee(releveModel.id),
                         fit: BoxFit.fill,
                       ),
                     ),
                   ),
+                    IconButton(
+              icon: Icon(Icons.delete),
+             
+               
+              onPressed: () {
+               _confirmDialog();
+               
+              },),
                   Padding(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 20, vertical: 10),
@@ -43,6 +91,7 @@ class Releve extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 20, vertical: 10),
+                        
                     child: Row(
                       children: [
                         Icon(
@@ -58,18 +107,6 @@ class Releve extends StatelessWidget {
                         ),
                         SizedBox(
                           width: 15,
-                        ),
-                        
-                        Icon(
-                          Icons.gps_fixed,
-                          size: 18,
-                        ),
-                        SizedBox(
-                          width: 8,
-                        ),
-                        Text(
-                          releveModel.adress,
-                          style: TextStyle(fontSize: 15),
                         ),
                         Icon(
                           Icons.gps_fixed,
