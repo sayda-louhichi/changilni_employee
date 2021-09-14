@@ -1,6 +1,5 @@
 import 'dart:convert';
-
-import 'package:changilni_employee/CustumWidget/OverlayCard.dart';
+import 'package:changilni_employee/Models/PushModel.dart';
 import 'package:changilni_employee/Models/ReleveModel.dart';
 import 'package:changilni_employee/api.dart';
 import 'package:changilni_employee/pages/HomePage.dart';
@@ -29,7 +28,7 @@ TextEditingController _parc = TextEditingController();
 var selectedType ;
  var select;
  Future getListParc()async{
-   var response= await http.get("http://192.168.1.7:3000/admin/list-parc");
+   var response= await http.get("http://192.168.0.230:3000/admin/list-parc");
    if(response.statusCode == 200){
      var jsonData = json.decode(response.body);
      setState((){
@@ -39,7 +38,7 @@ var selectedType ;
    print(parcItemList);
  }
  Future getListImma()async{
-   var response= await http.get("http://192.168.1.7:3000/admin/list-imma");
+   var response= await http.get("http://192.168.0.230:3000/admin/list-imma");
    if(response.statusCode == 200){
      var jsonData = json.decode(response.body);
      setState((){
@@ -48,11 +47,13 @@ var selectedType ;
    }
    print(immaItemList);
  }
+ 
  @override
  void initState(){
    super.initState();
    getListParc();
    getListImma();
+  
  }
   @override
   Widget build(BuildContext context) {
@@ -109,12 +110,16 @@ var selectedType ;
             SizedBox(
               height: 40,
             ),
+            
             addButton(),
-          ],
+        
+         
+                  ],
         ),
       ),
     );
   }
+  
 
   Widget titleTextField() {
     return Padding(
@@ -215,18 +220,7 @@ Widget parcTextField() {
        padding: const EdgeInsets.symmetric(
         horizontal: 10,
       ),
-    /* child: new PopupMenuButton<String>(
-                        icon: const Icon(Icons.arrow_drop_down),
-                        onSelected: (String value) {
-                          _parc.text = value;
-                        },
-                        itemBuilder: (BuildContext context) {
-                          return parcItemList.map<PopupMenuItem<String>>((parc) {
-                            return new PopupMenuItem(child: new Text(parc['name']),  value:parc['name']);
-                          }).toList();
-                        },
-                      ),*/
-                      child:  DropdownButton(
+       child:  DropdownButton(
           isExpanded:true,
           hint:Text("Parc"),
           value:selectedType,
@@ -329,5 +323,6 @@ Widget parcTextField() {
       _imageFile = PickedFile;
     });
   }
+
 
 }

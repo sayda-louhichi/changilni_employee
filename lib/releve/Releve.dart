@@ -1,3 +1,4 @@
+import 'package:changilni_employee/Models/PushModel.dart';
 import 'package:changilni_employee/Models/ReleveModel.dart';
 import 'package:changilni_employee/api.dart';
 import 'package:changilni_employee/pages/HomePage.dart';
@@ -8,7 +9,9 @@ class Releve extends StatelessWidget {
       : super(key: key);
   final ReleveModel releveModel;
   final Api networkHandler;
+  
   @override
+
   Widget build(BuildContext context) {
     Future<void> _confirmDialog() async {
     return showDialog<void>(
@@ -49,6 +52,17 @@ class Releve extends StatelessWidget {
       },
     );
   }
+ Future <void> _sendNotif()async
+     
+   { 
+        
+          PushModel notifModel =
+              PushModel(title: releveModel.immatriculation,body:releveModel.parc);
+          var response = await networkHandler.post2(
+              "/notification/send", notifModel.toJson());
+          print(response);
+        }
+  
     return Scaffold(
       body: ListView(
         children: [
@@ -71,12 +85,16 @@ class Releve extends StatelessWidget {
                   ),
                     IconButton(
               icon: Icon(Icons.delete),
-             
-               
               onPressed: () {
                _confirmDialog();
                
               },),
+              IconButton(
+                icon:Icon(Icons.notification_important),
+                onPressed: (){
+_sendNotif();
+                },
+              ),
                   Padding(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 20, vertical: 10),

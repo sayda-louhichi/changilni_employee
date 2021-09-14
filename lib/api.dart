@@ -5,14 +5,14 @@ import 'package:http/http.dart' as http;
 import 'package:logger/logger.dart';
 
 class Api {
-  String baseurl = "http://172.16.23.110:3000";
+  String baseurl = "http://192.168.0.230:3000";
   var log = Logger();
   FlutterSecureStorage storage = FlutterSecureStorage();
   Future get(String url) async {
     String token = await storage.read(key: "token");
     url = formater(url);
     // /user/register
-    var response = await http.get(
+    var response =  await http.get(
       url,
       headers: {"Authorization": "Bearer $token"},
     );
@@ -39,6 +39,7 @@ class Api {
     );
     return response;
   }
+  
 
   Future<http.Response> patch(String url, Map<String, String> body) async {
     String token = await storage.read(key: "token");
@@ -70,7 +71,19 @@ class Api {
     );
     return response;
   }
- 
+ Future<http.Response> post2(String url, Map<String, dynamic> body) async {
+  
+  url = formater(url);
+    log.d(body);
+    var response = await http.post(
+      url,
+      headers: {
+        "Content-type": "application/json",},
+    
+      body: json.encode(body),
+    );
+    return response;
+  }
   Future<http.StreamedResponse> patchImage(String url, String filepath) async {
     url = formater(url);
     String token = await storage.read(key: "token");
@@ -109,6 +122,36 @@ class Api {
     );
     return response;
   }
+ 
+/*sendNotify(String title,String body,String id)async{
+    await http.post(
+    'https://fcm.googleapis.com/fcm/send',
+     headers: <String, String>{
+       'Content-Type': 'application/json',
+       'Authorization': 'key=$serverToken',
+     },
+     body: jsonEncode(
+     <String, dynamic>{
+       'notification': <String, dynamic>{
+         'body': body.toString(),
+         'title': title.toString()
+       },
+       'priority': 'high',
+       'data': <String, dynamic>{
+         'click_action': 'FLUTTER_NOTIFICATION_CLICK',
+         'id': '1',
+         'status': 'done',
+         "name":"sayda"
+       },
+       'to': await FirebaseMessaging.instance.getToken(),
+     },
+    ),
+  );
+  }
+   getMessage(){
+  FirebaseMessaging.onMessage.listen((message){
+    print(message.notification.title);
+  });
+  }*/
   
-
 }
