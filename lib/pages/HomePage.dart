@@ -1,5 +1,6 @@
 import 'package:changilni_employee/Screens/HomeScreen.dart';
 import 'package:changilni_employee/pages/WelcomePage.dart';
+import 'package:changilni_employee/profile/CreateProfile.dart';
 import 'package:changilni_employee/profile/ProfileScreen.dart';
 import 'package:changilni_employee/releve/AddReleve.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +19,7 @@ class _HomePageState extends State<HomePage> {
   int currentState = 0 ;
    final networkHandler = Api();
    String email ="";
- List<Widget> widgets = [ HomeScreen(), ProfileScreen()];
+ List<Widget> widgets = [ HomeScreen(),ProfileScreen(),];
     final storage = FlutterSecureStorage();
     List<String> titleString = ["Home Page", "Profile Page"];
     Widget profilePhoto= Container(

@@ -1,4 +1,5 @@
 import 'package:changilni_employee/pages/SignInPage.dart';
+import 'package:changilni_employee/pages/SplachScreen.dart';
 import 'package:flutter/material.dart';
 
 class WelcomePage extends StatefulWidget {
@@ -33,7 +34,7 @@ class _WelcomePageState extends State<WelcomePage> {
               child: FlatButton(
                 onPressed: () {
                   Navigator.of(context).pushReplacement(MaterialPageRoute(
-                      builder: (BuildContext context) => SignInPage()));
+                      builder: (BuildContext context) => SplashScreen()));
                 },
                 child: Text(
                   "Bienvenue",

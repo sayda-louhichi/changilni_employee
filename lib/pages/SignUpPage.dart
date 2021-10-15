@@ -165,6 +165,7 @@ Api networkHandler = Api();
       if (response['Status']) {
         setState(() {
           // circular = false;
+          
           validate = false;
           errorText = "email already taken";
         });

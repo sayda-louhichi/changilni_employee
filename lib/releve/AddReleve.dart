@@ -15,6 +15,7 @@ class AddReleve extends StatefulWidget {
 
 class _AddReleveState extends State<AddReleve> {
   final _formkey = GlobalKey<FormState>();
+  
   TextEditingController _immatricule = TextEditingController();
   TextEditingController _adress = TextEditingController();
 TextEditingController _parc = TextEditingController();
@@ -23,12 +24,13 @@ TextEditingController _parc = TextEditingController();
   PickedFile _imageFile;
   IconData iconphoto = Icons.image;
   Api networkHandler = Api();
- List parcItemList = List();
- List immaItemList = List();
+ List<dynamic> parcItemList =List();
 var selectedType ;
  var select;
+ String errorText;
+  bool validate = false;
  Future getListParc()async{
-   var response= await http.get("http://192.168.0.230:3000/admin/list-parc");
+   var response= await http.get("http://192.168.1.8:3000/admin/list-parc");
    if(response.statusCode == 200){
      var jsonData = json.decode(response.body);
      setState((){
@@ -37,23 +39,10 @@ var selectedType ;
    }
    print(parcItemList);
  }
- Future getListImma()async{
-   var response= await http.get("http://192.168.0.230:3000/admin/list-imma");
-   if(response.statusCode == 200){
-     var jsonData = json.decode(response.body);
-     setState((){
-       immaItemList =jsonData;
-     });
-   }
-   print(immaItemList);
- }
- 
  @override
  void initState(){
    super.initState();
    getListParc();
-   getListImma();
-  
  }
   @override
   Widget build(BuildContext context) {
@@ -94,16 +83,14 @@ var selectedType ;
         key: _formkey,
         child: ListView(
           children: <Widget>[
+            SizedBox(height: 30,),
+            //immatriculationTextField(hint: "Nom",icon: Icons.check_box),
             titleTextField(),
+             SizedBox(
+              height: 10,
+            ),
+           adressTextField(),
             SizedBox(
-              height: 10,
-            ),
-            immatriculationTextField(),
-             SizedBox(
-              height: 10,
-            ),
-            adressTextField(),
-             SizedBox(
               height: 10,
             ),
             parcTextField(),
@@ -122,23 +109,26 @@ var selectedType ;
   
 
   Widget titleTextField() {
-    return Padding(
+     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: 10,
-        vertical: 10,
       ),
       child: TextFormField(
-        controller: _name,
-        validator: (value) {
-          if (value.isEmpty) {
-            return "Champ nom est obligatoire";
-          }
-          return null;
-        },
+        controller: _immatricule,
         decoration: InputDecoration(
+          errorText: validate ? null : errorText,
+            hintText: "1234tu123",
+            suffixIcon: IconButton(
+                icon: Icon( Icons.check_box),
+                onPressed: () {
+                
+                   checkImmatricule();
+        
+                },
+              ),
           border: OutlineInputBorder(
             borderSide: BorderSide(
-              color: Color(0xff707070),
+              color: Color(0xFF707070),
             ),
           ),
           focusedBorder: OutlineInputBorder(
@@ -147,7 +137,7 @@ var selectedType ;
               width: 2,
             ),
           ),
-          labelText: "Ajouter titre et image",
+          labelText: "Ajouter l'image et l'immatriculation",
           prefixIcon: IconButton(
             icon: Icon(
               iconphoto,
@@ -191,59 +181,79 @@ var selectedType ;
       ),
     );
   }
-  Widget immatriculationTextField() {
+  /*Widget immatriculationTextField({icon,hint}) {
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: 10,
       ),
+      child: TextFormField(
+        controller: _immatricule,
+        decoration: InputDecoration(
+          errorText: validate ? null : errorText,
+            hintText: "Ajouter l'image et l'immatriculation",
+            suffixIcon: IconButton(
+                icon: Icon( Icons.check_box),
+                onPressed: () {
+                
+                   checkImmatricule();
+        
+                },
+              ),
+          border: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: Color(0xFF707070),
+            ),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: Color(0xFF707070),
+              width: 2,
+            ),
+          ),
+          labelText: "1234tu123",
+          prefixIcon: IconButton(
+            icon: Icon(
+              iconphoto,
+              color: Color(0xFF707070),
+            ),
+            onPressed:(){showModalBottomSheet(
+                      context: context, builder: ((builder) => bottomSheet()));}
+          ),
+        ),
+        
+      
+    ));
     
-      child:DropdownButton(
-          isExpanded:true,
-          hint:Text("Immatriculation"),
-          value:selectedType,
-          items: immaItemList.map((immatricule) {
-            return DropdownMenuItem(
-              value:immatricule['immatriculation'],
-              child: Text(immatricule['immatriculation'])
-              );
-          }).toList(),
-        onChanged:(value){
-          setState(() {
-            _immatricule.text=value;
-          });
-        }),
-   
-    );
-  }
+  }*/
 Widget parcTextField() {
     return Padding(
        padding: const EdgeInsets.symmetric(
         horizontal: 10,
       ),
-       child:  DropdownButton(
-          isExpanded:true,
+       child: new DropdownButton<String>(
+         isExpanded:true,
           hint:Text("Parc"),
           value:selectedType,
-          items: parcItemList.map((parc) {
-            return DropdownMenuItem(
-              value:parc['name'],
-              child: Text(parc['name'])
-              );
-          }).toList(),
-        onChanged:(value){
+                  items: parcItemList.map<DropdownMenuItem<String>>((parc) =>
+                     new DropdownMenuItem<String>(
+                      value: parc["adress"],
+                      child: new Text((parc["adress"]).toString()),
+                    )
+                  ).toList(),
+                 onChanged:(value){
           setState(() {
             _parc.text=value;
           });
-        }),
-      
+                 })
     );
   }
+  
   Widget addButton() {
     return InkWell(
       onTap: () async {
         if (_imageFile != null && _formkey.currentState.validate()) {
           ReleveModel releveModel =
-              ReleveModel(immatriculation: _immatricule.text, adress: _adress.text,parc: _parc.text,name: _name.text);
+              ReleveModel(immatriculation: _immatricule.text, adress: _adress.text,parc: _parc.text);
           var response = await networkHandler.post1(
               "/releve/Add", releveModel.toJson());
           print(response.body);
@@ -323,6 +333,23 @@ Widget parcTextField() {
       _imageFile = PickedFile;
     });
   }
+  checkImmatricule() async {
+      var response = await networkHandler
+          .get("/immatricule/check/${_immatricule.text}");
+      if (response['Status']) {
+           setState(() {
+          // circular = false;
+          validate = false;
+          errorText = "L'immatricule est existe";
+        });
+      } else {
+        setState(() {
+          // circular = false;
+          validate = true;
+          errorText="L'immatricule n'existe pas";
+        });
+      }
+      }
 
 
 }

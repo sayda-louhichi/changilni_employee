@@ -62,10 +62,10 @@ class _SignInPageState extends State<SignInPage> {
                  passwordTextField(hint:"Mot de passe",icon:Icons.vpn_key),
               
                 SizedBox(
-                  height: 20,
+                  height: 5,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+               Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     InkWell(
                       onTap: () {
@@ -74,36 +74,18 @@ class _SignInPageState extends State<SignInPage> {
                             MaterialPageRoute(
                                 builder: (context) => ForgotPasswordPage()));
                       },
-                      child: Text(
-                        "Forgot Password ?",
+                        child:Text(
+                        "Nouveau Mot de passe?",
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: 17,
                           fontWeight: FontWeight.bold,
+                          
                         ),
-                      ),
-                    ),
-                    SizedBox(
-                      width: 10,
-    
-                    ),
-                    InkWell(
-                      onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => SignUpPage(),
-                        ));
-                      },
-                      child: Text(
-                        "Créer compte ?",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 17,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
+                      ),),
                   ],
                 ),
+            
                 InkWell(
                   onTap: () async {
                     setState(() {
@@ -166,16 +148,8 @@ class _SignInPageState extends State<SignInPage> {
                           ),
                   ),
                 ),
-                boxContainer(
-                  "assets/facebook.png",
-                  "Sign up with Facebook",
-                  null,
-                ),
-                boxContainer(
-                  "assets/google.png",
-                  "Sign up with Google",
-                  null,
-                ),
+               
+               
               ],
             )
           ],
@@ -184,37 +158,7 @@ class _SignInPageState extends State<SignInPage> {
     );
   }
 
-  Widget boxContainer(String path, String text, onClick) {
-    return Container(
-      alignment: Alignment.center,
-      child: InkWell(
-        onTap: onClick,
-        child: Container(
-          height: 60,
-          width: MediaQuery.of(context).size.width - 140,
-          child: Card(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-              child: Row(
-                children: [
-                  Image.asset(
-                    path,
-                    height: 25,
-                    width: 25,
-                  ),
-                  SizedBox(width: 20),
-                  Text(
-                    text,
-                    style: TextStyle(fontSize: 16, color: Colors.black87),
-                  )
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
+  
 
 Widget emailTextField({controller, hint, icon}) {
     return Container(
@@ -255,6 +199,7 @@ Widget emailTextField({controller, hint, icon}) {
             obscureText: vis,
             decoration: InputDecoration(
               errorText: validate ? null : errorText,
+              border: InputBorder.none,
               suffixIcon: IconButton(
                 icon: Icon(vis ? Icons.visibility_off : Icons.visibility),
                 onPressed: () {

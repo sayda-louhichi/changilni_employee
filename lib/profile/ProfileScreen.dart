@@ -25,7 +25,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       });
     } else {
       setState(() {
-        page = button();
+        page = CreateProfile();
       });
     }
   }

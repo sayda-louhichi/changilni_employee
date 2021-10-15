@@ -67,7 +67,7 @@ class Releve extends StatelessWidget {
       body: ListView(
         children: [
           Container(
-            height: 365,
+            height: 400,
             width: MediaQuery.of(context).size.width,
             child: Card(
               elevation: 8,
@@ -83,64 +83,38 @@ class Releve extends StatelessWidget {
                       ),
                     ),
                   ),
-                    IconButton(
+/*IconButton(
               icon: Icon(Icons.delete),
               onPressed: () {
                _confirmDialog();
                
-              },),
+              },),*/
               IconButton(
                 icon:Icon(Icons.notification_important),
                 onPressed: (){
 _sendNotif();
                 },
               ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 10),
-                    child: Text(
-                      releveModel.name,
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 10),
-                        
-                    child: Row(
-                      children: [
-                        Icon(
+                SizedBox(height: 10,),
+                   Icon(
                           Icons.car_rental,
                           size: 18,
                         ),
                         SizedBox(
                           width: 5,
                         ),
-                        Text(
+                        Text("immatricule "+
                           releveModel.immatriculation,
                           style: TextStyle(fontSize: 15),
                         ),
                         SizedBox(
-                          width: 15,
+                          height: 10,
                         ),
                         Icon(
                           Icons.gps_fixed,
                           size: 18,
                         ),
-                        SizedBox(
-                          width: 8,
-                        ),
-                        Text(
-                          releveModel.adress,
-                          style: TextStyle(fontSize: 15),
-                        ),
-                        Icon(
-                          Icons.park,
-                          size: 18,
-                        ),
+                        
                         SizedBox(
                           width: 8,
                         ),
@@ -149,12 +123,12 @@ _sendNotif();
                           style: TextStyle(fontSize: 15),
                         ),
                       ],
-                    ),
+              )
+              )
                   ),
-                ],
-              ),
-            ),
-          ),
+              
+            
+            
           SizedBox(
             height: 10,
           ),

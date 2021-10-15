@@ -8,11 +8,8 @@ part of 'SuperModel.dart';
 
 SuperModel _$SuperModelFromJson(Map<String, dynamic> json) {
   return SuperModel(
-    data: (json['data'] as List)
-        ?.map((e) =>
-            e == null ? null : ReleveModel.fromJson(e as Map<String, dynamic>))
-        ?.toList(),
-  );
+    data: json['data'].map<ReleveModel>((e) =>ReleveModel.fromJson(e)).toList());
+  
 }
 
 Map<String, dynamic> _$SuperModelToJson(SuperModel instance) =>

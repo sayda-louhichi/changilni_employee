@@ -5,16 +5,17 @@ import 'package:http/http.dart' as http;
 import 'package:logger/logger.dart';
 
 class Api {
-  String baseurl = "http://192.168.0.230:3000";
+  String baseurl = "http://192.168.1.8:3000";
   var log = Logger();
   FlutterSecureStorage storage = FlutterSecureStorage();
-  Future get(String url) async {
+  Future get( String url) async {
     String token = await storage.read(key: "token");
     url = formater(url);
     // /user/register
     var response =  await http.get(
       url,
-      headers: {"Authorization": "Bearer $token"},
+      headers: {"Authorization": "Bearer $token",
+       "Content-type": "application/json"},
     );
     if (response.statusCode == 200 || response.statusCode == 201) {
       log.i(response.body);

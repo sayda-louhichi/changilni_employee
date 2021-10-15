@@ -21,7 +21,7 @@ class ReleveModel {
       this.adress,
       this.parc,
       this.name});
-  factory ReleveModel.fromJson(Map<String, dynamic> json) =>
+  factory ReleveModel.fromJson(Map<String,dynamic> json) =>
       _$ReleveModelFromJson(json);
   Map<String, dynamic> toJson() => _$ReleveModelToJson(this);
 }

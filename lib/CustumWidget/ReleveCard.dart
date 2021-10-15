@@ -78,8 +78,8 @@ class ReleveCard extends StatelessWidget {
                 decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(8)),
-                child: Text(
-                  releveModel.name,
+                child: Text(releveModel.immatriculation,
+                  
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
