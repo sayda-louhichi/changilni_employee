@@ -181,50 +181,7 @@ var selectedType ;
       ),
     );
   }
-  /*Widget immatriculationTextField({icon,hint}) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 10,
-      ),
-      child: TextFormField(
-        controller: _immatricule,
-        decoration: InputDecoration(
-          errorText: validate ? null : errorText,
-            hintText: "Ajouter l'image et l'immatriculation",
-            suffixIcon: IconButton(
-                icon: Icon( Icons.check_box),
-                onPressed: () {
-                
-                   checkImmatricule();
-        
-                },
-              ),
-          border: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: Color(0xFF707070),
-            ),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: Color(0xFF707070),
-              width: 2,
-            ),
-          ),
-          labelText: "1234tu123",
-          prefixIcon: IconButton(
-            icon: Icon(
-              iconphoto,
-              color: Color(0xFF707070),
-            ),
-            onPressed:(){showModalBottomSheet(
-                      context: context, builder: ((builder) => bottomSheet()));}
-          ),
-        ),
-        
-      
-    ));
-    
-  }*/
+  
 Widget parcTextField() {
     return Padding(
        padding: const EdgeInsets.symmetric(
